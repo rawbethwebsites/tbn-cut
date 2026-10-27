@@ -1,0 +1,16 @@
+{
+ "name": "warm-kitchen",
+ "description": "Words gently float up and settle with a subtle spring, while the backdrop is a warm, soft grid, and transitions are smooth, slow fades.",
+ "when_to_use": "Recipe showcases, ingredient spotlights, lifestyle shots, or any video where the focus is on the comforting texture and warmth of the food itself.",
+ "motion": {
+  "title": "spring",
+  "stat": "count",
+  "transition": "fade",
+  "backdrop": "grid",
+  "window": "pop",
+  "speed": 0.9,
+  "stagger": 0.05
+ },
+ "made_by": "gemma",
+ "brief": "warm food brand: smooth, inviting reveals, nothing techy, medium pace, still lands prices clearly"
+}

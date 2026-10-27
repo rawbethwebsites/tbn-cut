@@ -1,0 +1,15 @@
+{
+ "name": "cds-os",
+ "description": "cdsigrl.org's OS motion: letters rise out of a mask, a gauge draws itself and its needle springs home, shutters split between scenes, windows pour out of the dock, blueprint grid behind.",
+ "when_to_use": "Product and service launches, prices, anything that should feel like a premium software boot-up.",
+ "motion": {
+  "title": "maskrise",
+  "stat": "gauge",
+  "transition": "shutter",
+  "backdrop": "grid",
+  "window": "genie",
+  "speed": 1.0,
+  "stagger": 0.045
+ },
+ "made_by": "claude"
+}

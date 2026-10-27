@@ -1,0 +1,7 @@
+{
+  "_about": "The Boost Nation brand look for explainer and script videos (TBN Operating Playbook §1 colours, logos from the TBN asset library). Not the locked talking-edit caption look.",
+  "accent": "#41B06E",
+  "palette": {"dark": "#141E46", "cream": "#FFF5E0", "ink": "#141E46", "grey": "#8DECB4", "sub_dark": "#8DECB4", "sub_cream": "#42825C"},
+  "logo_on_dark": "brand/tbn-logo-cream.png",
+  "logo_on_cream": "brand/tbn-logo-navy.png"
+}

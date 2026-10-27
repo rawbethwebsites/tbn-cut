@@ -1,0 +1,14 @@
+{
+ "name": "punchy",
+ "description": "Fast springy words with shutter cuts and genie windows, no grid.",
+ "when_to_use": "Hooks, offers and short ads under 20 seconds.",
+ "motion": {
+  "title": "spring",
+  "stat": "gauge",
+  "transition": "shutter",
+  "backdrop": "plain",
+  "window": "genie",
+  "speed": 1.25
+ },
+ "made_by": "claude"
+}

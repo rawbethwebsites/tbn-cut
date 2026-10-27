@@ -1,0 +1,7 @@
+output/
+creator-teardowns/*/video/
+creator-teardowns/*/frames/
+creator-teardowns/*/sheets/
+__pycache__/
+*.log
+testdata/

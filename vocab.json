@@ -1,0 +1,16 @@
+{
+  "_about": "Words Whisper mishears -> what Rob actually says. Fix text in the dashboard adds to 'learned' automatically.",
+  "fixes": {
+    "happy tracking": "habit tracking",
+    "happy stacking": "habit stacking",
+    "work tick": "WorkTick",
+    "worktick": "WorkTick",
+    "the boost nation": "The Boost Nation",
+    "gist and grind": "Gist & Grind",
+    "artisan's": "artisans",
+    "tbn cut": "TBN Cut",
+    "tv and cut": "TBN Cut",
+    "tbn": "TBN"
+  },
+  "learned": {}
+}

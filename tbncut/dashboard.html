@@ -1,0 +1,579 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TBN Cut</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+/* TBN brand: Navy #141E46, Green #41B06E, Forest #42825C, Mint #8DECB4, Cream #FFF5E0 (Operating Playbook §1) */
+:root { --navy:#141E46; --navy2:#1B2758; --navy3:#24326B; --line:#2E3C78; --green:#41B06E; --forest:#42825C; --mint:#8DECB4;
+        --cream:#FFF5E0; --muted:#A9B2D6; --bad:#FF7A6B; }
+* { box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body { margin:0; background:var(--navy); color:var(--cream); font-family:Inter, system-ui, sans-serif; -webkit-font-smoothing:antialiased; }
+button, input, textarea, select { font:inherit; color:inherit; }
+button { cursor:pointer; }
+.wrap { max-width:960px; margin:0 auto; padding:24px 20px 140px; }
+
+/* top bar */
+.top { display:flex; align-items:center; gap:14px; margin-bottom:28px; }
+.top img { width:40px; height:40px; }
+.top h1 { margin:0; font-size:22px; font-weight:900; letter-spacing:-.5px; }
+.top h1 span { color:var(--green); }
+.tabs { margin-left:auto; display:flex; background:var(--navy2); border:1px solid var(--line); border-radius:99px; padding:4px; }
+.tabs button { border:0; background:none; padding:9px 18px; border-radius:99px; font-weight:700; font-size:14px; color:var(--muted); }
+.tabs button.on { background:var(--cream); color:var(--navy); }
+.tabs .count { display:inline-block; min-width:20px; padding:1px 7px; margin-left:6px; border-radius:99px; background:var(--green); color:var(--navy); font-size:12px; }
+
+/* steps */
+.q { font-size:13px; font-weight:800; letter-spacing:1.5px; text-transform:uppercase; color:var(--mint); margin:30px 0 12px; display:flex; gap:10px; align-items:center; }
+.q .n { width:24px; height:24px; border-radius:50%; background:var(--green); color:var(--navy); display:inline-flex; align-items:center; justify-content:center; font-size:13px; letter-spacing:0; }
+.hidden { display:none !important; }
+
+.kinds { display:grid; grid-template-columns:repeat(auto-fit, minmax(170px, 1fr)); gap:12px; }
+.kind { text-align:left; background:var(--navy2); border:2px solid var(--line); border-radius:18px; padding:18px 16px 16px; transition:border-color .15s, transform .15s; }
+.kind:hover { border-color:var(--forest); transform:translateY(-2px); }
+.kind.on { border-color:var(--green); background:var(--navy3); }
+.kind .ic { font-size:26px; line-height:1; margin-bottom:10px; }
+.kind b { display:block; font-size:16px; font-weight:800; margin-bottom:4px; }
+.kind small { display:block; color:var(--muted); font-size:13px; line-height:1.4; }
+
+.drop { width:100%; display:flex; align-items:center; gap:16px; text-align:left; background:var(--navy2); border:2px dashed var(--line); border-radius:18px; padding:22px; }
+.drop:hover { border-color:var(--green); }
+.drop.ok { border-style:solid; border-color:var(--green); }
+.drop .ic { font-size:30px; }
+.picks { display:grid; grid-template-columns:2fr 1fr; gap:10px; }
+.drop.alt { border-style:solid; }
+body.dragging::after { content:"Drop your videos and pictures"; position:fixed; inset:12px; border:3px dashed var(--green); border-radius:24px;
+  background:rgba(20,30,70,.88); display:flex; align-items:center; justify-content:center; font-size:26px; font-weight:800; color:var(--mint); z-index:50; pointer-events:none; }
+.bar-up { height:6px; border-radius:6px; background:var(--navy3); margin-top:8px; overflow:hidden; }
+.bar-up div { height:100%; background:var(--green); width:0; transition:width .2s; }
+@media (max-width:640px) { .picks { grid-template-columns:1fr; } }
+.drop b { display:block; font-size:17px; }
+.drop small { color:var(--muted); font-size:13px; }
+.files { color:var(--muted); font-size:13px; margin-top:8px; line-height:1.5; }
+
+textarea { width:100%; min-height:170px; resize:vertical; background:var(--navy2); border:2px solid var(--line); border-radius:18px; padding:16px 18px; font-size:16px; line-height:1.55; outline:none; }
+textarea:focus, input[type=text]:focus { border-color:var(--green); }
+input[type=text] { background:var(--navy2); border:2px solid var(--line); border-radius:14px; padding:12px 14px; font-size:15px; outline:none; width:100%; }
+
+.pills { display:flex; gap:8px; flex-wrap:wrap; }
+.pill { background:var(--navy2); border:2px solid var(--line); border-radius:99px; padding:10px 16px; font-weight:700; font-size:14px; }
+.pill.on { border-color:var(--green); background:var(--green); color:var(--navy); }
+
+.looks { display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:10px; }
+.look { text-align:left; background:var(--navy2); border:2px solid var(--line); border-radius:16px; padding:14px 16px; }
+.look.on { border-color:var(--green); background:var(--navy3); }
+.look b { display:block; font-size:15px; margin-bottom:3px; }
+.look small { display:block; color:var(--muted); font-size:12px; line-height:1.4; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+.link { background:none; border:0; color:var(--mint); font-weight:700; font-size:14px; padding:10px 0; }
+
+details.more { margin-top:26px; background:var(--navy2); border:1px solid var(--line); border-radius:16px; padding:0 18px; }
+details.more summary { cursor:pointer; padding:16px 0; font-weight:700; color:var(--muted); list-style:none; }
+details.more summary::before { content:"＋ "; color:var(--green); }
+details.more[open] summary::before { content:"－ "; }
+.opt { display:grid; grid-template-columns:140px 1fr; gap:10px 16px; align-items:center; padding-bottom:18px; }
+.opt label { color:var(--muted); font-size:14px; font-weight:600; }
+.switch { display:flex; align-items:center; gap:10px; font-size:14px; }
+.switch input { width:20px; height:20px; accent-color:var(--green); }
+.colors { display:flex; gap:16px; flex-wrap:wrap; font-size:13px; color:var(--muted); }
+.colors input { width:34px; height:28px; border:0; background:none; vertical-align:middle; }
+
+/* bottom bar */
+.bar { position:fixed; left:0; right:0; bottom:0; background:rgba(20,30,70,.96); backdrop-filter:blur(8px); border-top:1px solid var(--line); }
+.bar .in { max-width:960px; margin:0 auto; padding:14px 20px; display:flex; align-items:center; gap:16px; }
+.bar .sum { flex:1; font-size:14px; color:var(--muted); line-height:1.4; }
+.bar .sum b { color:var(--cream); }
+.bar .err { color:var(--bad); font-weight:600; }
+.go { background:var(--green); color:var(--navy); border:0; border-radius:14px; padding:16px 28px; font-size:16px; font-weight:900; white-space:nowrap; }
+.go:disabled { opacity:.4; cursor:not-allowed; }
+
+/* my videos */
+.empty { text-align:center; color:var(--muted); padding:60px 20px; }
+.job { background:var(--navy2); border:1px solid var(--line); border-radius:20px; padding:18px; margin-bottom:16px; }
+.jh { display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+.jh b { font-size:16px; }
+.jh .when { color:var(--muted); font-size:13px; margin-left:auto; }
+.badge { font-size:12px; font-weight:800; border-radius:99px; padding:4px 10px; background:var(--navy3); color:var(--muted); }
+.badge.running, .badge.queued { background:var(--mint); color:var(--navy); }
+.badge.done { background:var(--green); color:var(--navy); }
+.badge.failed, .badge.stopped { background:var(--bad); color:var(--navy); }
+.stages { display:flex; gap:6px; margin:16px 0 6px; }
+.stages div { flex:1; height:6px; border-radius:6px; background:var(--navy3); }
+.stages div.done { background:var(--green); }
+.stages div.now { background:linear-gradient(90deg, var(--green), var(--mint)); animation:pulse 1.2s ease-in-out infinite; }
+@keyframes pulse { 50% { opacity:.45; } }
+.stage-name { font-size:14px; color:var(--cream); font-weight:600; }
+.stage-name small { color:var(--muted); font-weight:500; }
+details.raw { margin-top:8px; color:var(--muted); font-size:12px; }
+details.raw pre { white-space:pre-wrap; font-family:ui-monospace, Menlo, monospace; font-size:11px; }
+.prob { color:var(--bad); font-size:14px; margin-top:10px; }
+.outs { display:grid; grid-template-columns:repeat(auto-fill, minmax(240px, 1fr)); gap:14px; margin-top:14px; }
+.out video { width:100%; aspect-ratio:9/16; border-radius:14px; background:#000; display:block; }
+.out .meta { font-size:13px; color:var(--muted); margin:8px 2px; }
+.out .meta b { color:var(--cream); }
+.acts { display:flex; gap:6px; flex-wrap:wrap; }
+.acts button, .acts a { background:var(--navy3); border:1px solid var(--line); border-radius:10px; padding:8px 11px; font-size:13px; font-weight:700; color:var(--cream); text-decoration:none; }
+.acts .primary { background:var(--green); border-color:var(--green); color:var(--navy); }
+.verdict { font-size:13px; font-weight:700; margin-top:8px; color:var(--mint); }
+.panel { display:none; margin-top:10px; background:var(--navy); border:1px solid var(--line); border-radius:14px; padding:12px; }
+.panel.open { display:block; }
+.panel h3 { font-size:11px; letter-spacing:1.5px; color:var(--mint); margin:10px 0 6px; text-transform:uppercase; }
+.panel input[type=text] { padding:8px 10px; font-size:13px; margin-bottom:6px; border-radius:10px; }
+.panel .beat { border:1px solid var(--line); border-radius:10px; padding:8px; margin-bottom:6px; }
+.panel .beat .k { font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:1px; display:flex; justify-content:space-between; margin-bottom:4px; }
+.panel .go { width:100%; padding:12px; font-size:14px; margin-top:6px; }
+.tip { color:var(--muted); font-size:12px; margin-top:6px; line-height:1.5; }
+pre.pack { white-space:pre-wrap; font-size:13px; color:var(--cream); background:var(--navy); border-radius:12px; padding:12px; }
+@media (max-width:640px) {
+  .top h1 { font-size:18px; } .tabs button { padding:8px 12px; font-size:13px; }
+  .opt { grid-template-columns:1fr; } .bar .in { flex-direction:column; align-items:stretch; } .go { width:100%; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <img src="/brand/tbn-logo-cream.png" alt="">
+    <h1>TBN <span>Cut</span></h1>
+    <div class="tabs">
+      <button id="t-make" class="on">Make a video</button>
+      <button id="t-mine">My videos<span class="count hidden" id="busy"></span></button>
+    </div>
+  </div>
+
+  <!-- MAKE -->
+  <section id="make">
+    <div class="q"><span class="n">1</span> What are we making?</div>
+    <div class="kinds" id="kinds">
+      <button class="kind on" data-k="edit"><div class="ic">🎬</div><b>Edit my clips</b><small>Talking to camera. Each clip becomes a finished short.</small></button>
+      <button class="kind" data-k="script"><div class="ic">✍️</div><b>From a script</b><small>Type it, it's voiced and animated. No filming.</small></button>
+      <button class="kind" data-k="shorts"><div class="ic">✂️</div><b>Long video → shorts</b><small>One long talk becomes up to 4 shorts.</small></button>
+      <button class="kind" data-k="workout"><div class="ic">💪</div><b>Workout</b><small>Gym clips cut to the beat, best reps only.</small></button>
+      <button class="kind" data-k="explainer"><div class="ic">📊</div><b>Explainer</b><small>Your voice over charts and big statements.</small></button>
+    </div>
+
+    <!-- 2: footage -->
+    <div id="s-folder">
+      <div class="q"><span class="n">2</span> <span id="folder-q">Where are the clips?</span></div>
+      <div class="picks">
+        <button class="drop" id="pick-files"><div class="ic">🎞️</div><div><b id="pick-title">Choose videos &amp; pictures</b><small id="pick-sub">Pick as many as you like (⌘-click), or drag them onto this page.</small></div></button>
+        <button class="drop alt" id="pick"><div class="ic">📁</div><div><b>Choose a folder</b><small>Use everything in a folder.</small></div></button>
+      </div>
+      <div class="bar-up hidden" id="up"><div></div></div>
+      <div class="files" id="files"></div>
+      <div class="q" style="margin-top:20px">What should it focus on? <span style="color:var(--muted);text-transform:none;letter-spacing:0;font-weight:500">(optional)</span></div>
+      <input type="text" id="focus" placeholder="In your own words, e.g. the part where I was boxing and skipping">
+      <label class="switch" id="mix-row" style="margin-top:12px"><input type="checkbox" id="combine"> Put all the clips into one video</label>
+    </div>
+
+    <!-- 2: script -->
+    <div id="s-script" class="hidden">
+      <div class="q"><span class="n">2</span> Your script</div>
+      <textarea id="script" placeholder="Write it how you'd say it. One thought per line.&#10;&#10;My AI team built me a video editor. Overnight.&#10;It's called TBN Cut, and it runs right here on my laptop."></textarea>
+      <div class="q" style="margin-top:20px">Voice</div>
+      <div class="pills" id="voices">
+        <button class="pill on" data-v="9d0dd4cf">My voice</button>
+        <button class="pill" data-v="default">Neutral voice</button>
+      </div>
+    </div>
+
+    <!-- 3: look -->
+    <div id="s-look">
+      <div class="q"><span class="n">3</span> Look</div>
+      <div class="looks" id="looks"></div>
+      <button class="link" id="more-looks">Show all styles</button>
+    </div>
+
+    <details class="more" id="more">
+      <summary>More options</summary>
+      <div class="opt" id="opts"></div>
+    </details>
+  </section>
+
+  <!-- MINE -->
+  <section id="mine" class="hidden">
+    <div id="jobs"><div class="empty">No videos yet. Make one and it shows up here.</div></div>
+    <div class="tip" style="text-align:center;margin-top:20px">Tip: drop clips into <b>Movies → TBN Cut Inbox</b> (AirDrop works) and they're edited on their own.</div>
+  </section>
+</div>
+
+<div class="bar" id="bar">
+  <div class="in">
+    <div class="sum" id="sum"></div>
+    <button class="go" id="go">Make my video</button>
+  </div>
+</div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+async function api(path, body) {
+  const r = await fetch(path, body ? { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) } : {});
+  return r.json();
+}
+
+const FAV = ["tbn-house", "jack-roberts"];   // Rob's favourite styles show first
+const S = { kind: "edit", folder: null, videos: [], pictures: [], picked: false, look: "tbn-house", voice: "9d0dd4cf", length: "", pace: "", music: false, only: "",
+            cta: "", series: "", episode: "", colors: {} };
+let styles = [], showAll = false;
+
+/* ---------- tabs ---------- */
+function tab(which) {
+  $("t-make").classList.toggle("on", which === "make");
+  $("t-mine").classList.toggle("on", which === "mine");
+  $("make").classList.toggle("hidden", which !== "make");
+  $("mine").classList.toggle("hidden", which !== "mine");
+  $("bar").classList.toggle("hidden", which !== "make");
+  window.scrollTo(0, 0);
+  if (which === "mine") { lastHtml = ""; refresh(); }
+}
+$("t-make").onclick = () => tab("make");
+$("t-mine").onclick = () => tab("mine");
+
+/* ---------- step 1 ---------- */
+document.querySelectorAll(".kind").forEach((b) => b.onclick = () => {
+  S.kind = b.dataset.k;
+  document.querySelectorAll(".kind").forEach((x) => x.classList.toggle("on", x === b));
+  render();
+});
+
+/* ---------- step 2 ---------- */
+function took(r) {
+  if (r.ok) { S.folder = r.folder; S.videos = r.videos; S.pictures = r.pictures || []; S.picked = !!r.picked; }
+  render();
+}
+$("pick").onclick = async () => {
+  $("pick-sub").textContent = "Opening the folder picker…";
+  took(await api("/api/pick-folder", {}));
+};
+$("pick-files").onclick = async () => {
+  $("pick-sub").textContent = "Opening the file picker…";
+  took(await api("/api/pick-files", {}));
+};
+// Drag and drop: the browser can't share file paths, so dropped files are copied in, one at a time, with a progress bar.
+let dragDepth = 0;
+window.addEventListener("dragenter", (e) => { if ([...(e.dataTransfer.types || [])].includes("Files")) { dragDepth++; document.body.classList.add("dragging"); } });
+window.addEventListener("dragleave", () => { if (--dragDepth <= 0) { dragDepth = 0; document.body.classList.remove("dragging"); } });
+window.addEventListener("dragover", (e) => e.preventDefault());
+window.addEventListener("drop", async (e) => {
+  e.preventDefault(); dragDepth = 0; document.body.classList.remove("dragging");
+  const files = [...e.dataTransfer.files].filter((f) => /\.(mp4|mov|m4v|mkv|png|jpe?g|webp|heic|heif)$/i.test(f.name));
+  if (!files.length) { $("pick-sub").textContent = "Those weren't videos or pictures."; return; }
+  if (S.kind === "script") document.querySelector('.kind[data-k="edit"]').click();
+  const total = files.reduce((a, f) => a + f.size, 0);
+  let done = 0, to = S.picked ? S.folder : "", last = null;  // later drops add to what is already picked
+  $("up").classList.remove("hidden");
+  for (const [i, f] of files.entries()) {
+    last = await new Promise((ok) => {
+      const x = new XMLHttpRequest();
+      x.open("POST", `/api/upload?name=${encodeURIComponent(f.name)}&to=${encodeURIComponent(to)}`);
+      x.upload.onprogress = (ev) => {
+        $("up").firstElementChild.style.width = `${Math.round(((done + ev.loaded) / total) * 100)}%`;
+        $("pick-sub").textContent = `Adding ${i + 1} of ${files.length}: ${f.name}`;
+      };
+      x.onload = () => ok(JSON.parse(x.responseText));
+      x.onerror = () => ok({ ok: false });
+      x.send(f);
+    });
+    done += f.size;
+    if (last.ok) to = last.folder;
+  }
+  $("up").classList.add("hidden");
+  took(last || { ok: false });
+});
+document.querySelectorAll("#voices .pill").forEach((b) => b.onclick = () => {
+  S.voice = b.dataset.v;
+  document.querySelectorAll("#voices .pill").forEach((x) => x.classList.toggle("on", x === b));
+  render();
+});
+$("script").oninput = render;
+$("combine").onchange = render;
+$("focus").oninput = render;
+
+/* ---------- step 3 ---------- */
+async function loadStyles() {
+  styles = await api("/api/templates");
+  styles.sort((a, b) => (FAV.includes(a.id) ? FAV.indexOf(a.id) : 9) - (FAV.includes(b.id) ? FAV.indexOf(b.id) : 9));
+  renderLooks();
+}
+function renderLooks() {
+  const list = showAll ? styles : styles.filter((t) => FAV.includes(t.id) || t.id === S.look);
+  $("looks").innerHTML = list.map((t) => `<button class="look ${t.id === S.look ? "on" : ""}" data-id="${t.id}">
+      <b>${esc(t.name)}${FAV.includes(t.id) ? " ★" : ""}</b><small>${esc(t.about)}</small></button>`).join("");
+  document.querySelectorAll(".look").forEach((b) => b.onclick = () => { S.look = b.dataset.id; renderLooks(); render(); });
+  $("more-looks").textContent = showAll ? "Show only my favourites" : `Show all styles (${styles.length})`;
+}
+$("more-looks").onclick = () => { showAll = !showAll; renderLooks(); };
+
+/* ---------- more options (only what fits the chosen kind) ---------- */
+function pills(key, opts) {
+  return `<div class="pills">${opts.map(([v, l]) => `<button class="pill ${S[key] === v ? "on" : ""}" data-key="${key}" data-v="${v}">${l}</button>`).join("")}</div>`;
+}
+function renderOpts() {
+  const clip = S.kind !== "script";
+  let h = "";
+  if (S.kind === "edit" || S.kind === "explainer") {
+    h += `<label>Length</label>${pills("length", [["", "Auto"], ["30", "30 s"], ["45", "45 s"], ["60", "60 s"], ["90", "90 s"]])}`;
+    h += `<label>Pace</label>${pills("pace", [["", "Auto"], ["natural", "Natural"], ["tight", "Tight"], ["vtight", "Very tight"]])}`;
+  }
+  if (S.kind === "edit" || S.kind === "shorts") {
+    h += `<label>Music</label><label class="switch"><input type="checkbox" data-key="music" ${S.music ? "checked" : ""}> Soft beat under my voice</label>`;
+  }
+  if (S.kind === "script") {
+    h += `<label>Ending</label><input type="text" data-key="cta" value="${esc(S.cta)}" placeholder='e.g. COMMENT "CUT" (leave empty for SAVE THIS)'>`;
+  }
+  if (S.kind === "explainer") {
+    h += `<label>Series tag</label><input type="text" data-key="series" value="${esc(S.series)}" placeholder="e.g. GIST & GRIND">`;
+    h += `<label>Episode</label><input type="text" data-key="episode" value="${esc(S.episode)}" placeholder="e.g. EP 04">`;
+  }
+  if (clip) {
+    h += `<label>Only files named</label><input type="text" data-key="only" value="${esc(S.only)}" placeholder="Part of a file name, e.g. 0038 (not a description)">`;
+  }
+  if (S.kind === "edit" || S.kind === "shorts") {
+    h += `<label>Colours</label><div class="colors">
+      <span>Words <input type="color" data-c="style.text" value="${S.colors["style.text"] || "#FFFFFF"}"></span>
+      <span>Spoken word <input type="color" data-c="style.accent" value="${S.colors["style.accent"] || "#EA6113"}"></span>
+      <span>Graphic text <input type="color" data-c="style.ink" value="${S.colors["style.ink"] || "#0B0B0B"}"></span></div>`;
+  }
+  $("opts").innerHTML = h;
+  $("opts").querySelectorAll(".pill").forEach((b) => b.onclick = () => { S[b.dataset.key] = b.dataset.v; renderOpts(); render(); });
+  $("opts").querySelectorAll("input[type=checkbox]").forEach((c) => c.onchange = () => { S[c.dataset.key] = c.checked; render(); });
+  $("opts").querySelectorAll("input[type=text]").forEach((c) => c.oninput = () => { S[c.dataset.key] = c.value; render(); });
+  $("opts").querySelectorAll("input[type=color]").forEach((c) => c.oninput = () => { S.colors[c.dataset.c] = c.value; });
+}
+
+/* ---------- the page follows the state ---------- */
+const KIND = { edit: "Edit", script: "Script video", shorts: "Shorts", workout: "Workout", explainer: "Explainer" };
+let lastKind = null;
+function render() {
+  const script = S.kind === "script";
+  $("s-folder").classList.toggle("hidden", script);
+  $("s-script").classList.toggle("hidden", !script);
+  $("s-look").classList.toggle("hidden", script || S.kind === "workout");
+  $("mix-row").classList.toggle("hidden", S.kind !== "edit");
+  $("folder-q").textContent = S.kind === "shorts" ? "Where's the long video?" : S.kind === "workout" ? "Where are the gym clips?" : "Where are the clips?";
+  if (S.folder) {
+    const nv = S.videos.length, np = (S.pictures || []).length;
+    const count = [nv ? `${nv} video${nv > 1 ? "s" : ""}` : "", np ? `${np} picture${np > 1 ? "s" : ""}` : ""].filter(Boolean).join(" + ") || "nothing usable";
+    $(S.picked ? "pick-files" : "pick").classList.add("ok");
+    $(S.picked ? "pick" : "pick-files").classList.remove("ok");
+    $("pick-title").textContent = S.picked ? `✓ ${count} picked` : "Choose videos & pictures";
+    $("pick-sub").textContent = S.picked ? "Click to pick again, or drop more files on the page." : `Folder “${S.folder.split("/").filter(Boolean).pop()}”: ${count}`;
+    const names = [...S.videos, ...(S.pictures || [])];
+    $("files").innerHTML = (names.length ? esc(names.slice(0, 8).join(" · ") + (names.length > 8 ? ` · +${names.length - 8} more` : "")) : "")
+      + (np && S.kind !== "workout" ? `<br>Pictures pop up when you mention them, so name each file what you'll say (e.g. <i>dashboard.png</i>).` : "")
+      + (np && S.kind === "workout" ? `<br>Workout videos use the videos only.` : "");
+  }
+  if (lastKind !== S.kind) { renderOpts(); lastKind = S.kind; }
+
+  // one plain sentence of what will happen, and why the button is off when it is
+  let ready = true, why = "", say = "";
+  const lookName = (styles.find((t) => t.id === S.look) || {}).name || "";
+  if (script) {
+    const words = $("script").value.trim().split(/\s+/).filter(Boolean).length;
+    if (words < 5) { ready = false; why = "Write your script first."; }
+    say = `<b>Script video</b> · ${S.voice === "default" ? "neutral voice" : "your voice"} · TBN colours + logo · about ${Math.max(5, Math.round(words / 2.6))} s`;
+  } else {
+    if (!S.folder) { ready = false; why = "Choose your videos first."; }
+    else if (!S.videos.length) { ready = false; why = "Add at least one video."; }
+    const n = S.only ? "the matching clips" : `${S.videos.length || "your"} clip${S.videos.length === 1 ? "" : "s"}`;
+    const what = S.kind === "edit" ? ($("combine").checked ? `<b>One video</b> from ${n}` : `<b>A short from each of ${n}</b>`)
+      : S.kind === "shorts" ? `<b>Up to 4 shorts</b> from ${n}` : S.kind === "workout" ? `<b>Workout video</b> from ${n}` : `<b>Explainer</b> from ${n}`;
+    const focus = $("focus").value.trim();
+    if (S.only && S.videos.length && !S.videos.some((v) => v.toLowerCase().includes(S.only.toLowerCase()))) { ready = false; why = `No file is named like "${esc(S.only)}". Clear "Only files named" under More options.`; }
+    say = what + (focus ? ` · about “${esc(focus)}”` : "") + (S.kind !== "workout" && lookName ? ` · ${esc(lookName)}` : "") + (S.length ? ` · ${S.length} s` : "");
+  }
+  $("sum").innerHTML = ready ? say : `<span class="err">${why}</span>`;
+  $("go").disabled = !ready;
+  $("go").textContent = script ? "Make my video" : S.kind === "edit" && !$("combine").checked && S.videos.length > 1 ? `Edit ${S.videos.length} videos` : "Make my video";
+}
+
+/* ---------- go ---------- */
+$("go").onclick = async () => {
+  $("go").disabled = true;
+  let r;
+  if (S.kind === "script") {
+    r = await api("/api/script", { script: $("script").value, voice: S.voice, cta: S.cta, series: "THE BOOST NATION" });
+  } else {
+    const set = {};
+    for (const [k, v] of Object.entries(S.colors)) set[k] = v;
+    if (S.music) set["style.music"] = "beat";
+    if (S.length) { set["target_seconds"] = +S.length; set["max_seconds"] = Math.round(+S.length * 1.3); }
+    if (S.pace) set["pause_gap"] = { natural: 0.7, tight: 0.4, vtight: 0.28 }[S.pace];
+    const mode = S.kind === "edit" && $("combine").checked ? "mix" : S.kind;
+    r = await api("/api/run", { folder: S.folder, template: S.kind === "workout" ? "tbn-house" : S.look, only: S.only.trim(), focus: $("focus").value.trim(), mode, set,
+                                series: S.series.trim(), episode: S.episode.trim() });
+  }
+  if (!r.ok) { $("sum").innerHTML = `<span class="err">${esc(r.error)}</span>`; $("go").disabled = false; return; }
+  tab("mine");
+};
+
+/* ---------- my videos ---------- */
+// Plain-word stages, matched against the job log.
+const STAGES = {
+  clip: [["Getting ready", /queued/], ["Listening to you", /transcrib/], ["Reading every line", /scoring|Gemma/], ["Picking the best story", /Qwen|story|choosing/],
+         ["Adding captions and graphics", /rendering|plan|beats|scenes/], ["Final touches", /cover|pack|master/], ["Done", /done ->/]],
+  script: [["Getting ready", /queued/], ["Recording the voice", /voice \d/], ["Timing every word", /timing/], ["Designing the scenes", /scenes/], ["Done", /done ->/]],
+  rerender: [["Getting ready", /queued/], ["Re-rendering the text", /./], ["Done", /done|rendered/]],
+};
+function stageOf(j) {
+  const list = STAGES[j.kind === "script" ? "script" : j.kind === "rerender" ? "rerender" : "clip"];
+  if (j.status === "done") return { list, i: list.length - 1 };
+  const log = (j.log_tail || []).join("\n");
+  let i = 0;
+  list.forEach((s, k) => { if (k && s[1].test(log)) i = k; });
+  if (j.status === "running" && i === 0) i = 1;
+  if (i === list.length - 1 && j.status !== "done") i = list.length - 2;
+  return { list, i };
+}
+const ago = (t) => { if (!t) return ""; const m = Math.round((Date.now() / 1000 - t) / 60); return m < 1 ? "just now" : m < 60 ? `${m} min ago` : m < 1440 ? `${Math.round(m / 60)} h ago` : new Date(t * 1000).toLocaleDateString(); };
+const TWEAKS = [["Shorter (30 s)", { max_seconds: 30 }], ["Longer (90 s)", { max_seconds: 90 }], ["More graphics", { "motion.per_minute": 14, "motion.max_gap": 4 }],
+                ["Fewer graphics", { "motion.per_minute": 4, "motion.max_gap": 15 }], ["Faster cuts", { pause_gap: 0.3 }]];
+
+function title(j) {
+  if (j.kind === "script") return "Script video";
+  if (j.kind === "rerender") return "Text fix · " + (j.only || "");
+  const f = (j.folder || "").split("/").filter(Boolean).pop() || "";
+  return ({ mix: "One video", shorts: "Shorts", workout: "Workout", explainer: "Explainer" }[j.mode] || "Edit") + " · " + f + (j.focus ? " · " + j.focus : j.only ? " · " + j.only : "");
+}
+function outCard(j, o) {
+  const id = "o" + btoa(unescape(encodeURIComponent(o.file))).replace(/[^a-z0-9]/gi, "").slice(-16);
+  const f = encodeURIComponent(o.file);
+  const v = o.review ? `<div class="verdict">${o.review.verdict === "approve" ? "✓ Approved" : "↻ Sent back"}${o.review.note ? ": " + esc(o.review.note) : ""}</div>` : "";
+  const meta = o.seconds ? `<b>${o.seconds} s</b>${o.source_seconds ? ` from ${Math.round(o.source_seconds)} s of footage` : ""}` : "";
+  return `<div class="out">
+    <video src="${o.url}" controls preload="metadata" playsinline ${meta ? "" : `onloadedmetadata="this.nextElementSibling.innerHTML='<b>'+Math.round(this.duration)+' s</b>'"`}></video>
+    <div class="meta">${meta}</div>
+    <div class="acts">
+      <a class="primary" href="${o.url}" download>Download</a>
+      ${o.editable ? `<button onclick="openFix('${id}','${j.id}','${encodeURIComponent(o.work)}')">Fix text</button>` : ""}
+      <button onclick="toggle('r-${id}')">Redo</button>
+      <button onclick="sizes(this,'${f}')">Other sizes</button>
+      ${o.review && o.review.verdict === "approve" ? "" : `<button onclick="review('${j.id}','${f}','approve')">Approve</button>`}
+    </div>${v}
+    <div class="panel" id="fix-${id}"></div>
+    <div class="panel" id="r-${id}">
+      <div class="pills" style="margin-bottom:8px">${TWEAKS.map((t, i) => `<label class="pill" style="font-size:12px;padding:6px 10px"><input type="checkbox" value="${i}" style="accent-color:var(--green)"> ${t[0]}</label>`).join("")}</div>
+      <input type="text" placeholder="What should change?">
+      <button class="go" onclick="redo(this,'${j.id}','${f}')">Redo this video</button>
+    </div>
+  </div>`;
+}
+function toggle(id) { $(id).classList.toggle("open"); }
+
+let lastHtml = "";
+async function refresh() {
+  let jobs;
+  try { jobs = await api("/api/jobs"); } catch (e) { return; }
+  const busy = jobs.filter((j) => j.status === "running" || j.status === "queued").length;
+  $("busy").textContent = busy; $("busy").classList.toggle("hidden", !busy);
+  if ($("mine").classList.contains("hidden")) return;
+  if (!jobs.length) return;
+  const html = jobs.map((j) => {
+    const st = stageOf(j);
+    const live = j.status === "running" || j.status === "queued";
+    const empty = j.status === "done" && !j.outputs.length;
+    const word = empty ? "Nothing made" : { running: "Working", queued: "Waiting", done: "Ready", failed: "Didn't finish", stopped: "Stopped" }[j.status] || j.status;
+    const probs = (j.failed_videos || []).map((l) => l.split("] ").pop());
+    const skipped = (j.skipped_videos || []).length;
+    return `<div class="job">
+      <div class="jh"><span class="badge ${empty ? "stopped" : j.status}">${word}</span><b>${esc(title(j))}</b><span class="when">${ago(j.finished || j.started || j.created)}</span></div>
+      ${live ? `<div class="stages">${st.list.slice(1).map((s, k) => `<div class="${k + 1 < st.i ? "done" : k + 1 === st.i ? "now" : ""}"></div>`).join("")}</div>
+        <div class="stage-name">${esc(st.list[st.i][0])}… <small>${j.status === "queued" ? "another video is ahead of this one" : "you can leave this page, it keeps going"}</small></div>` : ""}
+      ${j.status === "failed" ? `<div class="prob">Didn't work${probs.length ? ": " + esc(probs[0].replace(/^[^:]*FAILED\s*/, "").replace(/^workout:\s*/, "")) : ""}. Change it under Make a video and try again, or tell Claude.</div>` : ""}
+      ${j.status === "done" && !j.outputs.length ? `<div class="prob">${skipped ? "No clip here had anyone talking, so nothing was made." : "Finished, but no video came out."}</div>` : ""}
+      ${skipped && j.outputs.length ? `<div class="tip">${skipped} clip${skipped > 1 ? "s" : ""} skipped (too short or no one talking).</div>` : ""}
+      ${(live || j.status === "failed") && (j.log_tail || []).length ? `<details class="raw"><summary>Details</summary><pre>${esc(j.log_tail.join("\n"))}</pre></details>` : ""}
+      ${j.outputs.length ? `<div class="outs">${j.outputs.map((o) => outCard(j, o)).join("")}</div>` : ""}
+      ${j.outputs.length && j.out_dir ? `<button class="link" onclick="showPack(this,'${encodeURIComponent(j.out_dir)}')">Draft captions for posting</button><pre class="pack hidden"></pre>` : ""}
+    </div>`;
+  }).join("");
+  const typing = document.activeElement && document.activeElement.closest && document.activeElement.closest(".panel");
+  const open = document.querySelector(".panel.open") || [...document.querySelectorAll("pre.pack")].some((p) => !p.classList.contains("hidden"));
+  const playing = [...document.querySelectorAll("video")].some((v) => !v.paused);
+  if (html !== lastHtml && !typing && !open && !playing) { $("jobs").innerHTML = html; lastHtml = html; }
+}
+
+async function openFix(id, jobId, work) {
+  const box = $("fix-" + id);
+  if (box.classList.toggle("open") === false) return;
+  box.innerHTML = '<div class="tip">Loading the text…</div>';
+  const t = await api("/api/text?work=" + work);
+  if (!t.ok) { box.innerHTML = `<div class="prob">${esc(t.error)}</div>`; return; }
+  const beatField = (b) => {
+    let f = `<input type="text" data-k="text" value="${esc(b.text)}">`;
+    if (b.type === "list") f += `<input type="text" data-k="items" value="${esc((b.items || []).join(", "))}" placeholder="items, comma separated">`;
+    if (b.type === "versus") f += `<input type="text" data-k="a" value="${esc(b.a)}"><input type="text" data-k="b" value="${esc(b.b)}">`;
+    if (b.type === "cutaway") f += `<input type="text" data-k="sub" value="${esc(b.sub || "")}" placeholder="second line">`;
+    return `<div class="beat" data-i="${b.i}"><div class="k"><span>${esc(b.type)}</span><label><input type="checkbox" data-k="remove"> remove</label></div>${f}</div>`;
+  };
+  const sty = t.style || {};
+  box.innerHTML = `<h3>What I say (fix any wrong word)</h3>
+    ${t.lines.map((l, i) => `<input type="text" class="ln" data-i="${i}" value="${esc(l)}">`).join("")}
+    ${t.beats.length ? `<h3>On-screen graphics</h3>${t.beats.map(beatField).join("")}` : ""}
+    <h3>Colours</h3>
+    <div class="colors"><span>Words <input type="color" class="c-text" value="${esc(sty.text)}"></span>
+      <span>Spoken word <input type="color" class="c-accent" value="${esc(sty.accent)}"></span>
+      <span>Graphic text <input type="color" class="c-ink" value="${esc(sty.ink)}"></span></div>
+    <button class="go">Save and update the video</button>
+    <div class="tip">About a minute. Fixed words are remembered for next time.</div>`;
+  box.querySelector(".go").onclick = async () => {
+    const lines = [...box.querySelectorAll(".ln")].map((x) => x.value);
+    const beats = [...box.querySelectorAll(".beat")].map((d) => {
+      const o = { i: +d.dataset.i };
+      d.querySelectorAll("input").forEach((x) => {
+        if (x.dataset.k === "remove") { if (x.checked) o.remove = true; }
+        else if (x.dataset.k === "items") o.items = x.value.split(",");
+        else o[x.dataset.k] = x.value;
+      });
+      return o;
+    });
+    const style = { text: box.querySelector(".c-text").value, accent: box.querySelector(".c-accent").value, ink: box.querySelector(".c-ink").value };
+    const r = await api("/api/text", { work: decodeURIComponent(work), lines, beats, style, job: jobId });
+    box.innerHTML = r.ok ? '<div class="tip">Saved. The updated video appears at the top in about a minute.</div>' : `<div class="prob">${esc(r.error)}</div>`;
+    setTimeout(() => box.classList.remove("open"), 2500);
+    refresh();
+  };
+}
+async function sizes(btn, file) {
+  btn.textContent = "Making the other sizes…"; btn.disabled = true;
+  const r = await api("/api/export", { file: decodeURIComponent(file) });
+  if (!r.ok) { btn.textContent = r.error; return; }
+  btn.outerHTML = r.files.map((f) => `<a href="${f.url}" download>${esc(f.name.match(/\[(.*)\]/)[1])}</a>`).join("");
+}
+async function showPack(btn, dir) {
+  const pre = btn.nextElementSibling;
+  if (!pre.classList.toggle("hidden")) {
+    pre.textContent = "Writing draft captions…";
+    const r = await api("/api/pack?dir=" + dir);
+    pre.textContent = r.ok ? r.text : r.error;
+  }
+}
+async function review(jobId, file, verdict, note) {
+  await api("/api/review", { job: jobId, file: decodeURIComponent(file), verdict, note: note || "" });
+  lastHtml = ""; refresh();
+}
+async function redo(btn, jobId, file) {
+  const box = btn.closest(".panel");
+  const set = {};
+  box.querySelectorAll("input[type=checkbox]:checked").forEach((c) => Object.assign(set, TWEAKS[+c.value][1]));
+  const note = box.querySelector("input[type=text]").value.trim();
+  const job = (await api("/api/jobs")).find((j) => j.id === jobId);
+  const name = decodeURIComponent(file).split("/").pop().split(" - ")[0];
+  await review(jobId, file, "redo", note);
+  const r = await api("/api/run", { folder: job.folder, template: job.template, only: name, set, note, mode: job.mode === "mix" ? "mix" : job.mode });
+  box.classList.remove("open");
+  if (!r.ok) alert(r.error);
+  lastHtml = ""; refresh();
+}
+
+loadStyles().then(render);
+render();
+refresh();
+setInterval(refresh, 2500);
+</script>
+</body>
+</html>

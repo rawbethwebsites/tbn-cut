@@ -1,0 +1,14 @@
+{
+ "name": "classic",
+ "description": "The original TBN Cut explainer motion: words spring up, numbers count, scenes fade.",
+ "when_to_use": "Talking-head explainers and anything already approved in this look.",
+ "motion": {
+  "title": "spring",
+  "stat": "count",
+  "transition": "fade",
+  "backdrop": "plain",
+  "window": "pop",
+  "speed": 1.0
+ },
+ "made_by": "claude"
+}

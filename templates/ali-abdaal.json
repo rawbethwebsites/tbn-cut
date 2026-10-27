@@ -1,0 +1,65 @@
+{
+  "name": "Ali Abdaal",
+  "about": "Calm explainer: long takes, gentle push-ins on emphasis, text cards up top about 6 a minute, captions fixed low. Measured from @aliabdaal (5 videos, 279 wpm, a cut every 14.7 s, graphics 25% of runtime, 54% text cards).",
+  "max_seconds": 60,
+  "width": 1080,
+  "height": 1920,
+  "renderer": "remotion",
+  "pause_gap": 0.6,
+  "captions": {
+    "on": true,
+    "words": 3,
+    "font": "arial-black",
+    "size": 92,
+    "color": "#FFFFFF",
+    "highlight": "#EA6113",
+    "outline": 7,
+    "outline_color": "#000000",
+    "uppercase": true,
+    "y": 0.7
+  },
+  "zoom": {
+    "alternate": true,
+    "amount": 1.17
+  },
+  "style": {
+    "accent": "#EA6113",
+    "ink": "#0B0B0B",
+    "font": "Poppins",
+    "captionSize": 70,
+    "captionY": 0.745,
+    "maxWords": 4,
+    "progressBar": true,
+    "uppercase": true,
+    "graphicsAt": "top",
+    "captionMode": "fixed",
+    "sfx": true,
+    "transition": "none"
+  },
+  "motion": {
+    "hook": true,
+    "per_minute": 6,
+    "min_gap": 3.0,
+    "max_gap": 11,
+    "cutaway_every": 999,
+    "types": [
+      "keyword",
+      "list",
+      "stat",
+      "quote"
+    ]
+  },
+  "min_cut": 1.5,
+  "target_seconds": 50,
+  "broll": {
+    "on": true,
+    "every": 12,
+    "length": 2.2
+  },
+  "workout": {
+    "seconds": 40,
+    "beats_per_cut": 8,
+    "bpm": 124,
+    "room_sound": 0.12
+  }
+}

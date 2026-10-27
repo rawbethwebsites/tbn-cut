@@ -1,0 +1,70 @@
+{
+  "name": "Jack Roberts",
+  "about": "Punchy: a zoom punch on every cut, graphics about 11 a minute sitting in the lower half, 2-word captions. Measured from @itssssss_jack (5 videos, a cut every 1.6 s, zoom punch on every cut, graphics 44% of runtime, 57% at the bottom).",
+  "max_seconds": 60,
+  "width": 1080,
+  "height": 1920,
+  "renderer": "remotion",
+  "pause_gap": 0.35,
+  "captions": {
+    "on": true,
+    "words": 3,
+    "font": "arial-black",
+    "size": 92,
+    "color": "#FFFFFF",
+    "highlight": "#EA6113",
+    "outline": 7,
+    "outline_color": "#000000",
+    "uppercase": true,
+    "y": 0.7
+  },
+  "zoom": {
+    "cycle": [
+      1.0,
+      1.35,
+      1.12,
+      1.4
+    ]
+  },
+  "style": {
+    "accent": "#EA6113",
+    "ink": "#0B0B0B",
+    "font": "Poppins",
+    "captionSize": 70,
+    "captionY": 0.76,
+    "maxWords": 2,
+    "progressBar": true,
+    "uppercase": true,
+    "graphicsAt": "bottom",
+    "captionMode": "move",
+    "sfx": true,
+    "transition": "whip"
+  },
+  "motion": {
+    "hook": true,
+    "per_minute": 11,
+    "min_gap": 1.2,
+    "max_gap": 5,
+    "cutaway_every": 999,
+    "types": [
+      "keyword",
+      "list",
+      "stat",
+      "versus",
+      "quote"
+    ]
+  },
+  "min_cut": 0.9,
+  "target_seconds": 40,
+  "broll": {
+    "on": true,
+    "every": 6,
+    "length": 2.2
+  },
+  "workout": {
+    "seconds": 25,
+    "beats_per_cut": 2,
+    "bpm": 124,
+    "room_sound": 0.12
+  }
+}

@@ -1,0 +1,67 @@
+{
+  "name": "TBN house",
+  "about": "Fast talking-head short in TBN colours: strongest line first, tight cuts, punch-in every other cut, all-caps Poppins captions with a big hero word per line, small helper words and positions that move around, spoken word in orange, coded motion graphics (hook title, keyword pops, lists, counters, full-screen cutaways).",
+  "max_seconds": 60,
+  "width": 1080,
+  "height": 1920,
+  "zoom": {
+    "alternate": true,
+    "amount": 1.15
+  },
+  "captions": {
+    "on": true,
+    "words": 3,
+    "font": "arial-black",
+    "size": 92,
+    "color": "#FFFFFF",
+    "highlight": "#EA6113",
+    "outline": 7,
+    "outline_color": "#000000",
+    "uppercase": true,
+    "y": 0.7
+  },
+  "renderer": "remotion",
+  "style": {
+    "accent": "#EA6113",
+    "ink": "#0B0B0B",
+    "font": "Poppins",
+    "captionSize": 70,
+    "captionY": 0.76,
+    "maxWords": 4,
+    "progressBar": true,
+    "uppercase": true,
+    "graphicsAt": "top",
+    "captionMode": "move",
+    "sfx": true,
+    "transition": "punch"
+  },
+  "motion": {
+    "hook": true,
+    "per_minute": 10,
+    "min_gap": 1.5,
+    "cutaway_every": 12,
+    "types": [
+      "keyword",
+      "list",
+      "stat",
+      "cutaway",
+      "versus",
+      "quote"
+    ],
+    "max_gap": 6
+  },
+  "pause_gap": 0.45,
+  "min_cut": 1.0,
+  "target_seconds": 40,
+  "broll": {
+    "on": true,
+    "every": 8,
+    "length": 2.2
+  },
+  "workout": {
+    "seconds": 30,
+    "beats_per_cut": 4,
+    "bpm": 124,
+    "room_sound": 0.12
+  }
+}

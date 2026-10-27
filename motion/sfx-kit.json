@@ -1,0 +1,36 @@
+{
+  "kit": 1,
+  "name": "tbn-cut",
+  "sr": 48000,
+  "note": "TBN Cut's four graphic-entrance sounds, taken from earshot's crisp preset (energetic product films). Roles use earshot's shared vocabulary; tbncut/sfx.py writes each one to the file name motion/src/Composition.tsx plays: tick -> tick.wav (list items), pop -> pop.wav (keyword / stat / quote / list), hit -> impact.wav (hook), whoosh.short -> whoosh.wav (versus / cutaway / broll / screen). level_db is baked into the WAV by `python -m tbncut.sfx build`, so the Remotion volumes stay as they are.",
+  "roles": {
+    "tick": {
+      "sound": "pro_hover_tick/soft",
+      "align": "onset",
+      "level_db": -5.0,
+      "note": "an airy digital tick (the minimal preset's tick): earshot rank z +1.13, p_real 0.69. hover_tick/detent ranked first (+1.27) but its take fails the audit as truncated; every tick this small is a 'no match' (the crisp preset's own choice measures z +1.02)"
+    },
+    "pop": {
+      "sound": "pop/1",
+      "align": "onset",
+      "level_db": -6.0,
+      "note": "earshot rank for 'a short rounded UI pop': strong match z +3.24, p_real 0.67 (the old ffmpeg pop matched at +3.79 but read synthesized, p_real 0.01)"
+    },
+    "hit": {
+      "sound": "pro_impact/deep",
+      "align": "onset",
+      "level_db": 0.0,
+      "note": "the hook hit, 1.31 s. earshot rank for 'a short deep impact hit': z +2.81 (plausible), the best of 7 candidates; p_real 0.45. impact/deep reads more real (0.83) but runs 6.2 s and rings under the first spoken line, and capping it to 0.9 s drops it to z +1.89"
+    },
+    "whoosh.short": {
+      "sound": "whoosh_fast/tight",
+      "align": "peak",
+      "level_db": -6.0,
+      "edits": {
+        "dur": 0.6,
+        "apex": 0.22
+      },
+      "note": "tight fast air for a cutaway or B-roll push"
+    }
+  }
+}

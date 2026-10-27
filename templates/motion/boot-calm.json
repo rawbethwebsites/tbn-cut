@@ -1,0 +1,15 @@
+{
+ "name": "boot-calm",
+ "description": "The cds-os letters and gauge, slowed down, with soft fades instead of shutters.",
+ "when_to_use": "Investor, finance and trust content where calm beats punch.",
+ "motion": {
+  "title": "maskrise",
+  "stat": "gauge",
+  "transition": "fade",
+  "backdrop": "grid",
+  "window": "pop",
+  "speed": 0.8,
+  "stagger": 0.06
+ },
+ "made_by": "claude"
+}

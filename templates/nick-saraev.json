@@ -1,0 +1,65 @@
+{
+  "name": "Nick Saraev",
+  "about": "Fast talking head: tight cuts every 2-3 s, light push-ins, few but full-screen graphics, no hook title (his top videos hold the first graphic until about 18 s), 2-word captions. Measured from @nicksaraev (9 videos, 248 wpm, graphics 6 a minute, 34% full-screen).",
+  "max_seconds": 60,
+  "width": 1080,
+  "height": 1920,
+  "renderer": "remotion",
+  "pause_gap": 0.35,
+  "captions": {
+    "on": true,
+    "words": 3,
+    "font": "arial-black",
+    "size": 92,
+    "color": "#FFFFFF",
+    "highlight": "#EA6113",
+    "outline": 7,
+    "outline_color": "#000000",
+    "uppercase": true,
+    "y": 0.7
+  },
+  "zoom": {
+    "alternate": true,
+    "amount": 1.15
+  },
+  "style": {
+    "accent": "#EA6113",
+    "ink": "#0B0B0B",
+    "font": "Poppins",
+    "captionSize": 70,
+    "captionY": 0.684,
+    "maxWords": 2,
+    "progressBar": true,
+    "uppercase": true,
+    "graphicsAt": "top",
+    "captionMode": "fixed",
+    "sfx": true,
+    "transition": "whip"
+  },
+  "motion": {
+    "hook": false,
+    "per_minute": 4,
+    "min_gap": 4.0,
+    "max_gap": 15,
+    "cutaway_every": 10,
+    "types": [
+      "cutaway",
+      "keyword",
+      "stat",
+      "versus"
+    ]
+  },
+  "min_cut": 1.0,
+  "target_seconds": 45,
+  "broll": {
+    "on": true,
+    "every": 9,
+    "length": 2.2
+  },
+  "workout": {
+    "seconds": 30,
+    "beats_per_cut": 4,
+    "bpm": 124,
+    "room_sound": 0.12
+  }
+}

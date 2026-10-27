@@ -1,0 +1,60 @@
+{
+  "source": "earshot kit",
+  "kit": "sfx-kit.json",
+  "earshot": "0.4.0",
+  "bank": "forge_v2r6+forge04r1+fit1+pluck1",
+  "sounds": {
+    "tick": {
+      "role": "tick",
+      "id": "pro_hover_tick/soft",
+      "level_db": -5.0,
+      "align": "onset",
+      "take": "tick_1.wav",
+      "seed": 335975170,
+      "onset_s": 0.0012,
+      "peak_s": 0.0045,
+      "dur_s": 0.0324,
+      "lufs_m_max": -28.25,
+      "checks": []
+    },
+    "pop": {
+      "role": "pop",
+      "id": "pop/1",
+      "level_db": -6.0,
+      "align": "onset",
+      "take": "pop_1.wav",
+      "seed": 1367864807,
+      "onset_s": 0.0,
+      "peak_s": 0.0035,
+      "dur_s": 0.15,
+      "lufs_m_max": -17.76,
+      "checks": []
+    },
+    "impact": {
+      "role": "hit",
+      "id": "pro_impact/deep",
+      "level_db": 0.0,
+      "align": "onset",
+      "take": "hit_1.wav",
+      "seed": 1000,
+      "onset_s": 0.0005,
+      "peak_s": 0.1585,
+      "dur_s": 1.3148,
+      "lufs_m_max": -13.27,
+      "checks": []
+    },
+    "whoosh": {
+      "role": "whoosh.short",
+      "id": "whoosh_fast/tight",
+      "level_db": -6.0,
+      "align": "peak",
+      "take": "whoosh-short_1.wav",
+      "seed": 1621782255,
+      "onset_s": 0.01,
+      "peak_s": 0.2195,
+      "dur_s": 0.6,
+      "lufs_m_max": -15.06,
+      "checks": []
+    }
+  }
+}
